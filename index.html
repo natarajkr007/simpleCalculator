@@ -4,26 +4,77 @@
   <title>Simple AngularJS calculator</title>
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
   <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.7/angular.min.js"></script>
+  <link rel="stylesheet" href="index.css">
 </head>
 <body ng-app="myApp">
-
+<div class="container">
   <div ng-controller="myCtrl" ng-init="history=[{}]">
-    <p>Calculator</p>
-    <input type="number" ng-model="num1">
-    <input type="number" ng-model="num2">
-    <button ng-click="addNums()">ADD</button>
-    <button ng-click="subNums()">SUB</button>
-    <button ng-click="mulNums()">MUL</button>
-    <button ng-click="divNums()">DIV</button>
-
-    <p>The result is :: {{result}}</p>
-    <h3>HISTORY</h3>
-    <ul>
-      <li ng-repeat="item in history">
-        {{ item.num1 + " " + item.operator + " " + item.num2 + "=" + item.result}}
+    <div class="jumbotron shadowEffect">
+      <h1 class="text-center" style="text-shadow: 3px 3px 3px black;">Calculator</h1>
+      <div class="reset">
+        <button class="btn btn-info" ng-click="resetOperands()">Reset</button>
+      </div>
+      <div class="history">
+        <button class="btn btn-warning" data-toggle="modal" data-target="#historyModal">History</button>
+      </div>
+    </div>
+    <div class="input-group col-md-6 inline-input">
+      <span class="input-group-addon" id="basic-addon1"><strong>Operand 1</strong></span>
+      <input type="number" class="form-control" placeholder="Number 1" aria-describedby="basic-addon1" ng-model="num1">
+    </div>
+    <hr />
+    <div class="input-group col-md-6 inline-input">
+      <span class="input-group-addon" id="basic-addon2"><strong>Operand 2</strong></span>
+      <input type="number" class="form-control" placeholder="Number 2" aria-describedby="basic-addon2" ng-model="num2">
+    </div>
+    <hr />
+    <hr />
+    <!-- <input type="number" ng-model="num1"> -->
+    <!-- <input type="number" ng-model="num2"> -->
+    <div class="text-center row">
+      <button class="btn btn-primary col-md-offset-1 col-md-2" ng-click="addNums()">ADD</button>
+      <button class="btn btn-primary col-md-offset-1 col-md-2" ng-click="subNums()">SUB</button>
+      <button class="btn btn-primary col-md-offset-1 col-md-2" ng-click="mulNums()">MUL</button>
+      <button class="btn btn-primary col-md-offset-1 col-md-2" ng-click="divNums()">DIV</button>
+    </div>
+    <hr />
+    <!-- <p>The result is :: {{result}}</p> -->
+    <div class="customWell row">
+      <h3 class="col-md-2 text-center addon">Result</h3>
+      <h3 class="col-md-9 text-center">{{ result }}</h3>
+    </div>
+    <!-- <h3>HISTORY</h3> -->
+    <!-- <ul class="row">
+      <li ng-repeat="item in history" ng-if="$index > 0" class="col-md-12">
+        <h5 class="col-md-6">{{item.num1 + " " + item.operator + " " + item.num2 + " = " + item.result}}</h5>
+        <button class="btn btn-danger col-md-offset-3 col-md-3" ng-click="forgetThis($index)">Forget</button>
       </li>
-    </ul>
+    </ul> -->
+
+    <div class="modal fade" id="historyModal" role="dialog">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close btn btn-danger" data-dismiss="modal">&times;</button>
+            <h2 class="modal-title text-center">History</h2>
+          </div>
+          <div class="modal-body">
+            <ul class="row">
+              <li ng-repeat="item in history" ng-if="$index > 0" class="col-md-12">
+                <h5 class="col-md-6">{{item.num1 + " " + item.operator + " " + item.num2 + " = " + item.result}}</h5>
+                <button class="btn btn-danger col-md-offset-3 col-md-3" ng-click="forgetThis($index)">Forget</button>
+              </li>
+            </ul>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
   </div>
+</div>
 
   <script>
     angular.module('myApp', [])
@@ -44,6 +95,13 @@
       $scope.divNums = function() {
         $scope.result = $scope.num1 / $scope.num2;
         $scope.history.push({num1:$scope.num1, num2:$scope.num2, operator:'/', result:$scope.result});
+      };
+      $scope.forgetThis = function(i) {
+        $scope.history.splice(i, 1);
+      };
+      $scope.resetOperands = function() {
+        $scope.num1 = null;
+        $scope.num2 = null;
       };
     }]);
   </script>
